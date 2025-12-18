@@ -33,6 +33,48 @@ The simulation implements the following 3GPP-standard functions:
 |**UPF**|User Plane Function|The high-speed router that forwards user data to the internet.|
 |**DN**|Data Network|Represents the external internet/content servers (e.g., Video Server).|
 
+
+## 🔗 API Endpoints Reference
+
+All NFs communicate over HTTP using JSON payloads. Below are the primary service interfaces:
+
+### Control Plane Endpoints
+
+- **NRF (Port 5001)**
+    
+    - `POST /register`: NF registration (Payload: `nf_name`, `ip`, `port`).
+        
+    - `GET /nfs`: Discovery endpoint; returns all active NF instances.
+        
+- **AMF (Port 5003)**
+    
+    - `POST /attach`: UE Attachment trigger (Payload: `imsi`).
+        
+    - `GET /`: Health check / Status.
+        
+- **AUSF (Port 5004)**
+    
+    - `POST /authenticate`: Authentication check (Payload: `imsi`).
+        
+- **UDM (Port 5002)**
+    
+    - `GET /subscriber/<imsi>`: Retrieve subscriber profile and keys.
+        
+- **SMF (Port 5005)**
+    
+    - `POST /create-session`: Request PDU session and IP allocation (Payload: `imsi`).
+        
+
+### User Plane Endpoints
+
+- **UPF (Port 5006)**
+    
+    - `GET /forward-data`: Routes packets from UE to the Data Network.
+        
+- **DN (Port 5007)**
+    
+    - `GET /content`: Serves simulated internet/application content.
+
 ##  Tech Stack
 
 - **Backend:** Python 3.9, Flask (REST APIs)
