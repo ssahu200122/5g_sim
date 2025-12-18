@@ -36,44 +36,70 @@ The simulation implements the following 3GPP-standard functions:
 
 ## 🔗 API Endpoints Reference
 
-All NFs communicate over HTTP using JSON payloads. Below are the primary service interfaces:
+All NFs communicate over HTTP using JSON payloads. Below is the exhaustive list of all available endpoints across the simulation.
 
-### Control Plane Endpoints
+### 1. NRF (Network Repository Function) - Port 5001
 
-- **NRF (Port 5001)**
+- `GET /`: Home - Returns NF identity.
     
-    - `POST /register`: NF registration (Payload: `nf_name`, `ip`, `port`).
-        
-    - `GET /nfs`: Discovery endpoint; returns all active NF instances.
-        
-- **AMF (Port 5003)**
+- `GET /status`: Status - Returns current health and operational status of NRF.
     
-    - `POST /attach`: UE Attachment trigger (Payload: `imsi`).
-        
-    - `GET /`: Health check / Status.
-        
-- **AUSF (Port 5004)**
+- `POST /register`: Service Registration - Allows NFs to register their profile.
     
-    - `POST /authenticate`: Authentication check (Payload: `imsi`).
-        
-- **UDM (Port 5002)**
+- `GET /nfs`: Discovery Service - Returns a JSON list of all currently registered NFs.
     
-    - `GET /subscriber/<imsi>`: Retrieve subscriber profile and keys.
-        
-- **SMF (Port 5005)**
-    
-    - `POST /create-session`: Request PDU session and IP allocation (Payload: `imsi`).
-        
 
-### User Plane Endpoints
+### 2. AMF (Access & Mobility Management) - Port 5003
 
-- **UPF (Port 5006)**
+- `GET /`: Home/Status - Returns NF identity and readiness.
     
-    - `GET /forward-data`: Routes packets from UE to the Data Network.
-        
-- **DN (Port 5007)**
+- `POST /attach`: UE Attachment - Main entry point for user connection requests.
     
-    - `GET /content`: Serves simulated internet/application content.
+
+### 3. AUSF (Authentication Server Function) - Port 5004
+
+- `GET /`: Home/Status - Returns security service status.
+    
+- `POST /authenticate`: Auth Service - Verifies user credentials with the UDM.
+    
+
+### 4. UDM (Unified Data Management) - Port 5002
+
+- `GET /`: Home/Status - Returns database availability status.
+    
+- `GET /subscriber/<imsi>`: Subscriber Query - Returns profile data for a specific IMSI.
+    
+
+### 5. SMF (Session Management Function) - Port 5005
+
+- `GET /`: Home/Status - Returns session management readiness.
+    
+- `POST /create-session`: Session Establishment - Allocates IP and sets up PDU session.
+    
+
+### 6. UPF (User Plane Function) - Port 5006
+
+- `GET /`: Home/Status - Returns routing plane status.
+    
+- `GET /forward-data`: Data Routing - Simulates the forwarding of packets to the DN.
+    
+
+### 7. DN (Data Network) - Port 5007
+
+- `GET /`: Home/Status - Returns internet gateway status.
+    
+- `GET /content`: Application Service - Serves simulated content (e.g., video stream).
+    
+
+### 8. UI Dashboard Backend - Port 8000
+
+- `GET /`: Dashboard UI - Serves the main NOC HTML interface.
+    
+- `GET /api/network-status`: Dashboard Data - Fetches real-time NF status from NRF.
+    
+- `POST /api/phone-connect`: Connection Proxy - Forwards UI requests to the AMF.
+    
+- `GET /api/phone-browse`: Traffic Proxy - Forwards UI requests to the UPF.
 
 ##  Tech Stack
 
