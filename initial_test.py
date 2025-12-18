@@ -1,17 +1,19 @@
 import requests
 
-# The AMF is running on port 5003
-AMF_URL = "http://127.0.0.1:5003/attach"
 
-# Our SIM Card ID
+URL = "http://127.0.0.1:5001/register"
+
+
 payload = {
-    "imsi": "imsi-123456789"
+    "nf_name": "imsi-123456789",
+    "ip":"21212",
+    "port":5000
 }
 
-print(f"--- Sending Attach Request to AMF at {AMF_URL} ---")
+print(f"--- Sending Attach Request to AMF at {URL} ---")
 
 try:
-    response = requests.post(AMF_URL, json=payload)
+    response = requests.post(URL, json=payload)
     
     print(f"Status Code: {response.status_code}")
     print("Response from 5G Core:")
