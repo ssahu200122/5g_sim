@@ -1,0 +1,112 @@
+version: '3.8'
+
+services:
+  # 1. The Brain (NRF)
+  nrf:
+    build: ./nrf
+    container_name: nrf
+    ports:
+      - "5001:5000"  # Host Port 5001 -> Container Port 5000
+    networks:
+      - 5g-net
+    environment:
+      - NF_NAME=NRF
+      - NF_PORT=5000
+
+  # 2. The Database (UDM)
+  udm:
+    build: ./udm
+    container_name: udm
+    ports:
+      - "5002:5000"
+    networks:
+      - 5g-net
+    depends_on:
+      - nrf
+    environment:
+      - NF_NAME=UDM
+      - NF_IP=udm       # In Docker, the hostname is the IP
+      - NF_PORT=5000
+      - NRF_URL=http://nrf:5000/register  # Pointing to the 'nrf' container
+
+  # 3. The Security Guard (AUSF)
+  ausf:
+    build: ./ausf
+    container_name: ausf
+    ports:
+      - "5004:5000"
+    networks:
+      - 5g-net
+    depends_on:
+      - nrf
+    environment:
+      - NF_NAME=AUSF
+      - NF_IP=ausf
+      - NF_PORT=5000
+      - NRF_URL=http://nrf:5000
+  
+
+  # 4. The Session Manager (SMF)
+  smf:
+    build: ./smf
+    container_name: smf
+    ports:
+      - "5005:5000"
+    networks:
+      - 5g-net
+    depends_on:
+      - nrf
+    environment:
+      - NF_NAME=SMF
+      - NF_IP=smf
+      - NF_PORT=5000
+      - NRF_URL=http://nrf:5000
+  
+  
+
+  # 5. The User Plane (UPF)
+  upf:
+    build: ./upf
+    container_name: upf
+    ports:
+      - "5006:5000"
+    networks:
+      - 5g-net
+    depends_on:
+      - nrf
+    environment:
+      - NF_NAME=UPF
+      - NF_IP=upf
+      - NF_PORT=5000
+      - NRF_URL=http://nrf:5000
+
+  # 6. The Internet (DN)
+  dn:
+    build: ./dn
+    container_name: dn
+    ports:
+      - "5007:5000"
+    networks:
+      - 5g-net
+
+  # 7. The Gatekeeper (AMF)
+  amf:
+    build: ./amf
+    container_name: amf
+    ports:
+      - "5003:5000"
+    networks:
+      - 5g-net
+    depends_on:
+      - nrf
+    environment:
+      - NF_NAME=AMF
+      - NF_IP=amf
+      - NF_PORT=5000
+      - NRF_URL=http://nrf:5000  # Pointing to the 'nrf' container
+
+# Define the shared network
+networks:
+  5g-net:
+    driver: bridge
+    
