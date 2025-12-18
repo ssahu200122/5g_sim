@@ -5,7 +5,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 # --- CONFIG ---
-NF_NAME = "UDM"
+NF_NAME = os.environ.get('NF_NAME', 'UDM')
 NF_IP = os.environ.get('NF_IP', '0.0.0.0')
 NF_PORT = int(os.environ.get('NF_PORT', 5000))
 NRF_URL = os.environ.get('NRF_URL', 'http://host.docker.internal:5001/register') 

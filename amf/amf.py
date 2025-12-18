@@ -7,7 +7,7 @@ from flask import Flask, jsonify, request
 app = Flask(__name__)
 
 # --- CONFIGURATION ---
-NF_NAME = "AMF"
+NF_NAME = os.environ.get('NF_NAME', 'AMF')
 # In Docker, we listen on 0.0.0.0 to accept connections from outside the container
 NF_IP = os.environ.get('NF_IP', '0.0.0.0')
 NF_PORT = int(os.environ.get('NF_PORT', 5000))

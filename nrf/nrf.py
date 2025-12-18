@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request
 app = Flask(__name__)
 
 # CONFIG
-NF_NAME = "NRF"
+NF_NAME = os.environ.get('NF_NAME', 'NRF')
 NF_IP = os.environ.get('NF_IP', '0.0.0.0')
 NF_PORT = int(os.environ.get('NF_PORT', 5000))
 
