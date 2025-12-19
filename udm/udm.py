@@ -10,7 +10,7 @@ NF_IP = os.environ.get('NF_IP', '0.0.0.0')
 NF_PORT = int(os.environ.get('NF_PORT', 5000))
 NRF_URL = os.environ.get('NRF_URL', 'http://host.docker.internal:5001/register') 
 # Note: 'host.docker.internal' lets a container talk to the host machine's localhost on Windows/Mac. 
-# On Linux, we might need a different network setup, but we'll fix that in the Docker Compose step.
+
 
 # --- SIM CARD DATABASE (Hardcoded for now) ---
 SUBSCRIBER_DB = {
@@ -43,9 +43,6 @@ def get_subscriber(imsi):
 
 # --- REGISTRATION ---
 def register_with_nrf():
-    # In a real Docker network, we can't use 0.0.0.0 to tell others where we are.
-    # We will fix the IPs perfectly in the Docker Compose step (Step 7).
-    # For now, this is just to prove it runs.
     try:
         data = {"nf_name": NF_NAME, "ip": NF_IP, "port": NF_PORT}
         requests.post(NRF_URL, json=data, timeout=2)
